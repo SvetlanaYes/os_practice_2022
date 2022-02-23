@@ -22,16 +22,17 @@ blocking_queue_t* create_queue(const size_t size)
 
 bool push(blocking_queue_t* queue, const int  item)
 {
+   int count = 0;
   node* newnode = malloc(sizeof(node));
   if (newnode == NULL)
     return false;
-
-  while(1)
+   
+  while(count < 12)
   {
-    if (queue->capacity == queue->size )
-       pthread_cond_wait(&cond_max,&mutex_);
     if (pthread_mutex_lock(&mutex_) != 0)
        return 1;
+    if (queue->capacity == queue->size )
+       pthread_cond_wait(&cond_max,&mutex_);
     newnode->value = item;
     newnode->next = NULL;
 
@@ -48,26 +49,26 @@ bool push(blocking_queue_t* queue, const int  item)
     }
     ++(queue->capacity);
     
-    std::cout << "push - " << queue->capacity << std::endl;
-    
-    pthread_cond_signal(&cond_min);
-    
+    printf("push - %ld\n",queue->capacity);    
     if (pthread_mutex_unlock(&mutex_) != 0)
        return 1;
+    ++count;
+    pthread_cond_signal(&cond_min);
   }
   return true;
 }
 
 bool pop(blocking_queue_t* queue, int* dest)
 {
+   int count = 0;
    if (queue->head == NULL)
       return  false;
-   while(1)
+   while(count < 12)
    {
-     if (queue->capacity == 0)
-        pthread_cond_wait(&cond_min,&mutex_);
       if (pthread_mutex_lock(&mutex_) != 0)
         return 1;
+      if (queue->capacity == 0)
+        pthread_cond_wait(&cond_min,&mutex_);
      node* tmp = queue->head;
      *dest = tmp->value;
      queue->head = queue->head->next;
@@ -78,12 +79,14 @@ bool pop(blocking_queue_t* queue, int* dest)
      free(tmp); 
      --(queue->capacity);
      
-     std::cout << "pop - " << queue->capacity << std::endl;
+     printf("pop - %ld\n",queue->capacity);
      
-     pthread_cond_signal(&cond_max); 
      
      if (pthread_mutex_unlock(&mutex_) != 0)
         return 1;
+     ++count;
+     pthread_cond_signal(&cond_max); 
+
    }
    return true;
 }
