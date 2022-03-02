@@ -65,13 +65,13 @@ void run_child(const int shm_id, const size_t child_number, const size_t size)
 
     shm->sum_ += sum;
 
-  //  if (shmdt(shm) != 0)
-   //     perror("Unable to detach from the shared memory");
-// es if-ov sksuma anverj ashxatel;
+    
     if (pthread_mutex_unlock(&shm->mutex_) != 0) {
         perror("error in mutex unlock");
         return;
     }
+    if (shmdt(shm) != 0)
+       perror("Unable to detach from the shared memory");
 }
      
 
