@@ -53,12 +53,28 @@ void run_child(const int shm_id, const size_t child_number, const size_t size)
     shm_t* shm = shmat(shm_id,NULL,0);
     const size_t begin = child_number*size;
     const size_t end = begin + size;
+    size_t sum = 0;
     for (int i = begin; i < end; ++i)
     {
-        shm->sum_ += shm->arr_[i];
+        sum += shm->arr_[i];
     }
-     
+    if (pthread_mutex_lock(&shm->mutex_) != 0) {
+        perror("error in mutex lock");
+        return;
+    }
+
+    shm->sum_ += sum;
+
+  //  if (shmdt(shm) != 0)
+   //     perror("Unable to detach from the shared memory");
+// es if-ov sksuma anverj ashxatel;
+    if (pthread_mutex_unlock(&shm->mutex_) != 0) {
+        perror("error in mutex unlock");
+        return;
+    }
 }
+     
+
 
 void run_parent(const int shm_id)
 {
