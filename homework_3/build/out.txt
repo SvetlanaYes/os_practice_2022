@@ -1,0 +1,19 @@
+Consolidate compiler generated dependencies of target ipc
+[ 25%] Building C object CMakeFiles/ipc.dir/ipc/ipc.c.o
+/home/svetlana/Desktop/os_practice_2022/lesson_3/homework_3/ipc/ipc.c: In function ‘create_shm’:
+/home/svetlana/Desktop/os_practice_2022/lesson_3/homework_3/ipc/ipc.c:26:20: warning: returning ‘void *’ from a function with return type ‘int’ makes integer from pointer without a cast [-Wint-conversion]
+   26 |             return NULL;
+      |                    ^~~~
+/home/svetlana/Desktop/os_practice_2022/lesson_3/homework_3/ipc/ipc.c:33:16: warning: returning ‘void *’ from a function with return type ‘int’ makes integer from pointer without a cast [-Wint-conversion]
+   33 |         return NULL;
+      |                ^~~~
+/home/svetlana/Desktop/os_practice_2022/lesson_3/homework_3/ipc/ipc.c: In function ‘run_child’:
+/home/svetlana/Desktop/os_practice_2022/lesson_3/homework_3/ipc/ipc.c:54:10: warning: assignment to ‘int’ from ‘void *’ makes integer from pointer without a cast [-Wint-conversion]
+   54 |      shm = shmat(shm_id,NULL,0);
+      |          ^
+/home/svetlana/Desktop/os_practice_2022/lesson_3/homework_3/ipc/ipc.c:55:21: error: invalid type argument of ‘->’ (have ‘int’)
+   55 |      printf("%d",shm->sum_);
+      |                     ^~
+make[2]: *** [CMakeFiles/ipc.dir/build.make:76: CMakeFiles/ipc.dir/ipc/ipc.c.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:85: CMakeFiles/ipc.dir/all] Error 2
+make: *** [Makefile:91: all] Error 2
