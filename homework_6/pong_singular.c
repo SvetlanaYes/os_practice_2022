@@ -17,10 +17,9 @@ void  INThandler(int sig)
      char  c;
 
      signal(sig, SIG_IGN);
-	 msgctl(msgid1, IPC_RMID, NULL);
-	 msgctl(msgid2, IPC_RMID, NULL);
+	// msgctl(msgid1, IPC_RMID, NULL);
+	// msgctl(msgid2, IPC_RMID, NULL);
      signal(SIGINT, INThandler);
-     getchar(); 
 }
 
 
